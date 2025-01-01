@@ -9,6 +9,7 @@ test('SQS Queue and SNS Topic Created', () => {
   // THEN
 
   const template = Template.fromStack(stack);
+  console.log(template.toJSON());
 
   template.hasResourceProperties('AWS::SQS::Queue', {
     VisibilityTimeout: 300
