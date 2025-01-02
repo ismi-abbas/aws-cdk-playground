@@ -1,16 +1,17 @@
 import { DynamoDB } from '@aws-sdk/client-dynamodb';
-import { Lambda, InvokeCommand } from '@aws-sdk/client-lambda';
-import { Request } from 'express';
+import { InvokeCommand, Lambda } from '@aws-sdk/client-lambda';
+import { Hono } from 'hono';
+import { handle } from 'hono/aws-lambda';
 
-export const handler = async function (event: Request) {
-    console.log('Request', JSON.stringify(event, undefined, 2));
+const app = new Hono();
 
+app.get('/', async (c) => {
     const dynamo = new DynamoDB();
     const lambda = new Lambda();
 
     await dynamo.updateItem({
         TableName: process.env.HITS_TABLE_NAME,
-        Key: { path: { S: event.path } },
+        Key: { path: { S: c.req.path } },
         UpdateExpression: 'ADD hits :incr',
         ExpressionAttributeValues: { ':incr': { N: '1' } },
     });
@@ -31,4 +32,6 @@ export const handler = async function (event: Request) {
 
     // return response to upstream
     return JSON.parse(result);
-};
+});
+
+export const handler = handle(app);
