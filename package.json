@@ -7,7 +7,7 @@
     "scripts": {
         "build": "tsc",
         "start": "nodemon",
-        "serve-local": "ts-node src/lambda/app.local.ts",
+        "serve-local": "ts-node src/lambda/index.local.ts",
         "test": "jest --coverage --silent",
         "lint": "eslint . --cache && pnpm prettier-check",
         "lint-fix": "eslint . --cache --fix",
@@ -16,20 +16,27 @@
         "deploy:dev": "cdk deploy iksn-backend-dev --progress events --log --require-approval \"never\""
     },
     "devDependencies": {
+        "@aws-sdk/client-dynamodb": "^3.716.0",
+        "@aws-sdk/client-lambda": "^3.716.0",
+        "@aws-sdk/client-s3": "^3.717.0",
+        "@aws-sdk/client-secrets-manager": "^3.716.0",
+        "@aws-sdk/client-sns": "^3.716.0",
+        "@hono/node-server": "^1.13.7",
         "@types/express": "^5.0.0",
         "@types/jest": "^29.5.14",
         "@types/node": "22.7.9",
         "aws-cdk": "2.173.4",
+        "aws-cdk-lib": "2.173.4",
+        "aws-sdk-client-mock": "^4.1.0",
+        "constructs": "^10.0.0",
+        "esbuild": "^0.24.2",
         "jest": "^29.7.0",
         "ts-jest": "^29.2.5",
         "ts-node": "^10.9.2",
         "typescript": "~5.6.3"
     },
     "dependencies": {
-        "@aws-sdk/client-dynamodb": "^3.716.0",
-        "@aws-sdk/client-lambda": "^3.716.0",
-        "aws-cdk-lib": "2.173.4",
-        "constructs": "^10.0.0",
+        "@aws-sdk/client-ses": "^3.716.0",
         "hono": "^4.6.15"
     },
     "packageManager": "pnpm@9.13.0+sha512.beb9e2a803db336c10c9af682b58ad7181ca0fbd0d4119f2b33d5f2582e96d6c0d93c85b23869295b765170fbdaa92890c0da6ada457415039769edf3c959efe"

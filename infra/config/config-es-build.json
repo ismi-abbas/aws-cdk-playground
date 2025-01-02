@@ -1,0 +1,14 @@
+{
+    "sourceMap": true,
+    "sourcesContent": true,
+    "target": "es2020",
+    "keepNames": true,
+    "stack": {
+        "dev": {
+            "minify": false
+        },
+        "prod": {
+            "minify": true
+        }
+    }
+}
