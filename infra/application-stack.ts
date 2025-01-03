@@ -144,10 +144,11 @@ export class ApplicationStack extends cdk.Stack {
             new iam.PolicyStatement({
                 actions: [
                     'ses:SendEmail',
-                    'SES:SendRawEmail',
+                    'ses:SendRawEmail',
                     'ses:SendTemplatedEmail',
                 ],
                 resources: [
+                    `arn:aws:ses:${config.stack.dev.cognitoRegion}:${config.stack.dev.account}:identity/${config.stack.dev.emailIdentity}`,
                     `arn:aws:ses:${config.stack.dev.cognitoRegion}:${config.stack.dev.account}:identity/${config.stack.dev.enpoints.api}`,
                 ],
                 effect: iam.Effect.ALLOW,

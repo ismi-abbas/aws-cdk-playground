@@ -2,6 +2,8 @@ import {
     SESClient,
     SendEmailCommand,
     SendEmailCommandInput,
+    SendTemplatedEmailCommand,
+    SendTemplatedEmailCommandInput,
 } from '@aws-sdk/client-ses';
 
 const ses = new SESClient({
@@ -13,6 +15,7 @@ const sendEmail = async (email: string) => {
         Destination: {
             ToAddresses: [email],
         },
+        Source: 'muhdabbas98@gmail.com',
         Message: {
             Body: {
                 Text: {
@@ -25,7 +28,6 @@ const sendEmail = async (email: string) => {
                 Charset: 'UTF-8',
             },
         },
-        Source: 'abbaspuzi.dev@gmail.com', // Replace with your verified SES email
     };
 
     try {
@@ -39,27 +41,17 @@ const sendEmail = async (email: string) => {
 };
 
 const sendTemplateEmail = async (email: string) => {
-    const params: SendEmailCommandInput = {
+    const params: SendTemplatedEmailCommandInput = {
         Destination: {
             ToAddresses: [email],
         },
-        Message: {
-            Body: {
-                Html: {
-                    Data: '<h1>This is a test email from AWS SES</h1>',
-                    Charset: 'UTF-8',
-                },
-            },
-            Subject: {
-                Data: 'Test Email',
-                Charset: 'UTF-8',
-            },
-        },
-        Source: 'abbaspuzi.dev@gmail.com', // Replace with your verified SES email
+        Source: 'muhdabbas98@gmail.com',
+        Template: 'OTPEmailTemplate',
+        TemplateData: JSON.stringify({ code: '123456' }),
     };
 
     try {
-        const command = new SendEmailCommand(params);
+        const command = new SendTemplatedEmailCommand(params);
         const response = await ses.send(command);
         return { success: true, messageId: response.MessageId };
     } catch (error) {

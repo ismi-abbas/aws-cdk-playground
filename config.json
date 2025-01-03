@@ -6,17 +6,19 @@
     "servicePrefix": "cdk-playground",
     "stackName": "ismiabbas-cdk-playground",
     "region": "ap-southeast-5",
+    "emailArn": "arn:aws:ses:ap-southeast-1:654654447613:identity/abbaspuzi.dev@gmail.com",
     "stack": {
         "dev": {
             "account": "654654447613",
             "cognitoRegion": "ap-southeast-1",
             "cdnS3": "iksn-dev-cdn-bucket",
             "cdnDistributionId": "E8A7IXFBZNPC4",
+            "emailIdentity": "muhdabbas98@gmail.com",
             "enpoints": {
-                "api": "aws-test.ismiabbas.xyz",
-                "web": "dev-iksn-uitm.zons.io",
+                "api": "aws.ismiabbas.xyz",
+                "web": "aws.ismiabbas.xyz",
                 "certArn": "arn:aws:acm:ap-southeast-5:654654447613:certificate/731a4fb5-14e4-418f-97a5-e42618c723d7",
-                "globalCertArn": "arn:aws:acm:us-east-1:051826742695:certificate/5380fe1a-95fd-4299-a174-7b010f876db1"
+                "globalCertArn": "arn:aws:acm:us-east-1:654654447613:certificate/040782fb-ab48-4938-8ea4-5b9123763cc7"
             }
         },
         "prod": {
@@ -24,11 +26,12 @@
             "cognitoRegion": "ap-southeast-1",
             "cdnS3": "iksn-cdn-bucket",
             "cdnDistributionId": "EXUTYM9TYNJ6J",
+            "emailIdentity": "muhdabbas98@gmail.com",
             "enpoints": {
-                "api": "aws-test.ismiabbas.xyz",
-                "web": "dev-iksn-uitm.zons.io",
+                "api": "aws.ismiabbas.xyz",
+                "web": "aws.ismiabbas.xyz",
                 "certArn": "arn:aws:acm:ap-southeast-5:654654447613:certificate/731a4fb5-14e4-418f-97a5-e42618c723d7",
-                "globalCertArn": "arn:aws:acm:us-east-1:051826742695:certificate/5380fe1a-95fd-4299-a174-7b010f876db1"
+                "globalCertArn": "arn:aws:acm:us-east-1:654654447613:certificate/040782fb-ab48-4938-8ea4-5b9123763cc7"
             }
         }
     }

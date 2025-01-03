@@ -1,0 +1,266 @@
+Resources:
+  cdkplaygrounddevapihandleridServiceRole44D25C51:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Statement:
+          - Action: sts:AssumeRole
+            Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+        Version: "2012-10-17"
+      ManagedPolicyArns:
+        - Fn::Join:
+            - ""
+            - - "arn:"
+              - Ref: AWS::Partition
+              - :iam::aws:policy/service-role/AWSLambdaBasicExecutionRole
+    Metadata:
+      aws:cdk:path: ApplicationStack/cdk-playground-dev-api-handler-id/ServiceRole/Resource
+  cdkplaygrounddevapihandleridServiceRoleDefaultPolicy9083A5D4:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyDocument:
+        Statement:
+          - Action:
+              - ses:SendEmail
+              - ses:SendRawEmail
+              - ses:SendTemplatedEmail
+            Effect: Allow
+            Resource:
+              - arn:aws:ses:ap-southeast-1:654654447613:identity/aws.ismiabbas.xyz
+              - arn:aws:ses:ap-southeast-1:654654447613:identity/muhdabbas98@gmail.com
+        Version: "2012-10-17"
+      PolicyName: cdkplaygrounddevapihandleridServiceRoleDefaultPolicy9083A5D4
+      Roles:
+        - Ref: cdkplaygrounddevapihandleridServiceRole44D25C51
+    Metadata:
+      aws:cdk:path: ApplicationStack/cdk-playground-dev-api-handler-id/ServiceRole/DefaultPolicy/Resource
+  cdkplaygrounddevapihandlerid1530FFAF:
+    Type: AWS::Lambda::Function
+    Properties:
+      Architectures:
+        - arm64
+      Code:
+        S3Bucket: cdk-hnb659fds-assets-654654447613-ap-southeast-5
+        S3Key: c4bcfee3bc7d340deb5197f9695603524efdb32f70f1343d42184f107f84b2c5.zip
+      Environment:
+        Variables:
+          EMAIL_IDENTITY: aws.ismiabbas.xyz
+          COGNITO_REGION: ap-southeast-1
+          CDN_S3_BUCKET: iksn-dev-cdn-bucket
+          CDN_DISTRIBUTION_ID: E8A7IXFBZNPC4
+      FunctionName: cdk-playground-dev-api-handler
+      Handler: index.handler
+      MemorySize: 256
+      Role:
+        Fn::GetAtt:
+          - cdkplaygrounddevapihandleridServiceRole44D25C51
+          - Arn
+      Runtime: nodejs22.x
+      Timeout: 10
+    DependsOn:
+      - cdkplaygrounddevapihandleridServiceRoleDefaultPolicy9083A5D4
+      - cdkplaygrounddevapihandleridServiceRole44D25C51
+    Metadata:
+      aws:cdk:path: ApplicationStack/cdk-playground-dev-api-handler-id/Resource
+      aws:asset:path: asset.c4bcfee3bc7d340deb5197f9695603524efdb32f70f1343d42184f107f84b2c5
+      aws:asset:is-bundled: true
+      aws:asset:property: Code
+  cdkplaygrounddevgatewayid6D207EA6:
+    Type: AWS::ApiGateway::RestApi
+    Properties:
+      Name: cdk-playground-dev-gateway
+    Metadata:
+      aws:cdk:path: ApplicationStack/cdk-playground-dev-gateway-id/Resource
+  cdkplaygrounddevgatewayidDeployment509C0B63db38cf4f8895e047133a3098ef2fa715:
+    Type: AWS::ApiGateway::Deployment
+    Properties:
+      Description: Automatically created by the RestApi construct
+      RestApiId:
+        Ref: cdkplaygrounddevgatewayid6D207EA6
+    DependsOn:
+      - cdkplaygrounddevgatewayidproxyANY4A60DA38
+      - cdkplaygrounddevgatewayidproxy1FEED75C
+      - cdkplaygrounddevgatewayidANY34677571
+    Metadata:
+      aws:cdk:path: ApplicationStack/cdk-playground-dev-gateway-id/Deployment/Resource
+  cdkplaygrounddevgatewayidDeploymentStagedevF9C56DBF:
+    Type: AWS::ApiGateway::Stage
+    Properties:
+      DeploymentId:
+        Ref: cdkplaygrounddevgatewayidDeployment509C0B63db38cf4f8895e047133a3098ef2fa715
+      RestApiId:
+        Ref: cdkplaygrounddevgatewayid6D207EA6
+      StageName: dev
+    Metadata:
+      aws:cdk:path: ApplicationStack/cdk-playground-dev-gateway-id/DeploymentStage.dev/Resource
+  cdkplaygrounddevgatewayidCustomDomain22789366:
+    Type: AWS::ApiGateway::DomainName
+    Properties:
+      DomainName: aws.ismiabbas.xyz
+      EndpointConfiguration:
+        Types:
+          - REGIONAL
+      RegionalCertificateArn: arn:aws:acm:ap-southeast-5:654654447613:certificate/731a4fb5-14e4-418f-97a5-e42618c723d7
+    Metadata:
+      aws:cdk:path: ApplicationStack/cdk-playground-dev-gateway-id/CustomDomain/Resource
+  cdkplaygrounddevgatewayidCustomDomainMapApplicationStackcdkplaygrounddevgatewayid1B1B47410DF93929:
+    Type: AWS::ApiGateway::BasePathMapping
+    Properties:
+      DomainName:
+        Ref: cdkplaygrounddevgatewayidCustomDomain22789366
+      RestApiId:
+        Ref: cdkplaygrounddevgatewayid6D207EA6
+      Stage:
+        Ref: cdkplaygrounddevgatewayidDeploymentStagedevF9C56DBF
+    Metadata:
+      aws:cdk:path: ApplicationStack/cdk-playground-dev-gateway-id/CustomDomain/Map:--=>ApplicationStackcdkplaygrounddevgatewayid1B1B4741/Resource
+  cdkplaygrounddevgatewayidproxy1FEED75C:
+    Type: AWS::ApiGateway::Resource
+    Properties:
+      ParentId:
+        Fn::GetAtt:
+          - cdkplaygrounddevgatewayid6D207EA6
+          - RootResourceId
+      PathPart: "{proxy+}"
+      RestApiId:
+        Ref: cdkplaygrounddevgatewayid6D207EA6
+    Metadata:
+      aws:cdk:path: ApplicationStack/cdk-playground-dev-gateway-id/Default/{proxy+}/Resource
+  cdkplaygrounddevgatewayidproxyANYApiPermissionApplicationStackcdkplaygrounddevgatewayid1B1B4741ANYproxy26A74073:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - cdkplaygrounddevapihandlerid1530FFAF
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:aws:execute-api:ap-southeast-5:654654447613:"
+            - Ref: cdkplaygrounddevgatewayid6D207EA6
+            - /
+            - Ref: cdkplaygrounddevgatewayidDeploymentStagedevF9C56DBF
+            - /*/*
+    Metadata:
+      aws:cdk:path: ApplicationStack/cdk-playground-dev-gateway-id/Default/{proxy+}/ANY/ApiPermission.ApplicationStackcdkplaygrounddevgatewayid1B1B4741.ANY..{proxy+}
+  cdkplaygrounddevgatewayidproxyANYApiPermissionTestApplicationStackcdkplaygrounddevgatewayid1B1B4741ANYproxyF91D7386:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - cdkplaygrounddevapihandlerid1530FFAF
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:aws:execute-api:ap-southeast-5:654654447613:"
+            - Ref: cdkplaygrounddevgatewayid6D207EA6
+            - /test-invoke-stage/*/*
+    Metadata:
+      aws:cdk:path: ApplicationStack/cdk-playground-dev-gateway-id/Default/{proxy+}/ANY/ApiPermission.Test.ApplicationStackcdkplaygrounddevgatewayid1B1B4741.ANY..{proxy+}
+  cdkplaygrounddevgatewayidproxyANY4A60DA38:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: ANY
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS_PROXY
+        Uri:
+          Fn::Join:
+            - ""
+            - - arn:aws:apigateway:ap-southeast-5:lambda:path/2015-03-31/functions/
+              - Fn::GetAtt:
+                  - cdkplaygrounddevapihandlerid1530FFAF
+                  - Arn
+              - /invocations
+      ResourceId:
+        Ref: cdkplaygrounddevgatewayidproxy1FEED75C
+      RestApiId:
+        Ref: cdkplaygrounddevgatewayid6D207EA6
+    Metadata:
+      aws:cdk:path: ApplicationStack/cdk-playground-dev-gateway-id/Default/{proxy+}/ANY/Resource
+  cdkplaygrounddevgatewayidANYApiPermissionApplicationStackcdkplaygrounddevgatewayid1B1B4741ANYF4358DF3:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - cdkplaygrounddevapihandlerid1530FFAF
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:aws:execute-api:ap-southeast-5:654654447613:"
+            - Ref: cdkplaygrounddevgatewayid6D207EA6
+            - /
+            - Ref: cdkplaygrounddevgatewayidDeploymentStagedevF9C56DBF
+            - /*/
+    Metadata:
+      aws:cdk:path: ApplicationStack/cdk-playground-dev-gateway-id/Default/ANY/ApiPermission.ApplicationStackcdkplaygrounddevgatewayid1B1B4741.ANY..
+  cdkplaygrounddevgatewayidANYApiPermissionTestApplicationStackcdkplaygrounddevgatewayid1B1B4741ANYF10D0787:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName:
+        Fn::GetAtt:
+          - cdkplaygrounddevapihandlerid1530FFAF
+          - Arn
+      Principal: apigateway.amazonaws.com
+      SourceArn:
+        Fn::Join:
+          - ""
+          - - "arn:aws:execute-api:ap-southeast-5:654654447613:"
+            - Ref: cdkplaygrounddevgatewayid6D207EA6
+            - /test-invoke-stage/*/
+    Metadata:
+      aws:cdk:path: ApplicationStack/cdk-playground-dev-gateway-id/Default/ANY/ApiPermission.Test.ApplicationStackcdkplaygrounddevgatewayid1B1B4741.ANY..
+  cdkplaygrounddevgatewayidANY34677571:
+    Type: AWS::ApiGateway::Method
+    Properties:
+      AuthorizationType: NONE
+      HttpMethod: ANY
+      Integration:
+        IntegrationHttpMethod: POST
+        Type: AWS_PROXY
+        Uri:
+          Fn::Join:
+            - ""
+            - - arn:aws:apigateway:ap-southeast-5:lambda:path/2015-03-31/functions/
+              - Fn::GetAtt:
+                  - cdkplaygrounddevapihandlerid1530FFAF
+                  - Arn
+              - /invocations
+      ResourceId:
+        Fn::GetAtt:
+          - cdkplaygrounddevgatewayid6D207EA6
+          - RootResourceId
+      RestApiId:
+        Ref: cdkplaygrounddevgatewayid6D207EA6
+    Metadata:
+      aws:cdk:path: ApplicationStack/cdk-playground-dev-gateway-id/Default/ANY/Resource
+Outputs:
+  cdkplaygrounddevgatewayidEndpointEE260FA2:
+    Value:
+      Fn::Join:
+        - ""
+        - - https://
+          - Ref: cdkplaygrounddevgatewayid6D207EA6
+          - .execute-api.ap-southeast-5.
+          - Ref: AWS::URLSuffix
+          - /
+          - Ref: cdkplaygrounddevgatewayidDeploymentStagedevF9C56DBF
+          - /
+Parameters:
+  BootstrapVersion:
+    Type: AWS::SSM::Parameter::Value<String>
+    Default: /cdk-bootstrap/hnb659fds/version
+    Description: Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]
+
