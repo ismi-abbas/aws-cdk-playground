@@ -5,8 +5,8 @@
     },
     "servicePrefix": "cdk-playground",
     "stackName": "ismiabbas-cdk-playground",
-    "region": "ap-southeast-5",
-    "emailArn": "arn:aws:ses:ap-southeast-1:654654447613:identity/abbaspuzi.dev@gmail.com",
+    "region": "ap-southeast-1",
+    "emailArn": "arn:aws:ses:ap-southeast-1:654654447613:identity/muhdabbas98@gmail.com",
     "stack": {
         "dev": {
             "account": "654654447613",
@@ -17,7 +17,7 @@
             "enpoints": {
                 "api": "aws.ismiabbas.xyz",
                 "web": "aws.ismiabbas.xyz",
-                "certArn": "arn:aws:acm:ap-southeast-5:654654447613:certificate/731a4fb5-14e4-418f-97a5-e42618c723d7",
+                "certArn": "arn:aws:acm:ap-southeast-1:654654447613:certificate/f87a6902-873b-4b3d-a3f7-d7dd5a73a3e5",
                 "globalCertArn": "arn:aws:acm:us-east-1:654654447613:certificate/040782fb-ab48-4938-8ea4-5b9123763cc7"
             }
         },
@@ -28,9 +28,9 @@
             "cdnDistributionId": "EXUTYM9TYNJ6J",
             "emailIdentity": "muhdabbas98@gmail.com",
             "enpoints": {
-                "api": "aws.ismiabbas.xyz",
-                "web": "aws.ismiabbas.xyz",
-                "certArn": "arn:aws:acm:ap-southeast-5:654654447613:certificate/731a4fb5-14e4-418f-97a5-e42618c723d7",
+                "api": "aws-test.ismiabbas.xyz",
+                "web": "aws-test.ismiabbas.xyz",
+                "certArn": "arn:aws:acm:ap-southeast-1:654654447613:certificate/f87a6902-873b-4b3d-a3f7-d7dd5a73a3e5",
                 "globalCertArn": "arn:aws:acm:us-east-1:654654447613:certificate/040782fb-ab48-4938-8ea4-5b9123763cc7"
             }
         }

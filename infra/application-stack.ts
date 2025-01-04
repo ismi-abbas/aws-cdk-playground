@@ -75,6 +75,7 @@ interface ApplicationProperties extends StackProps {
         certArn: string;
         globalCertArn: string;
     };
+    emailArn: string;
 }
 
 const build = (env: Environment): ApplicationProperties => {
@@ -93,6 +94,7 @@ const build = (env: Environment): ApplicationProperties => {
             ...esConfig,
             ...stack[env],
         },
+        emailArn: config.emailArn,
         envName: env,
         cognitoRegion: config.stack[env].cognitoRegion,
         cdnS3: config.stack[env].cdnS3,
@@ -106,7 +108,14 @@ const build = (env: Environment): ApplicationProperties => {
     };
 };
 export class ApplicationStack extends cdk.Stack {
-    constructor(scope: Construct, id: string, props?: StackProps) {
+    constructor(
+        scope: Construct,
+        id: string,
+        props: StackProps & {
+            emailIdentityArn: string;
+            domainIdentityArn: string;
+        }
+    ) {
         super(scope, id, props);
 
         const lambdaInfo = buildNameAndId({
@@ -128,16 +137,15 @@ export class ApplicationStack extends cdk.Stack {
                 keepNames: true,
             },
             environment: {
-                EMAIL_IDENTITY: config.stack.dev.enpoints.api,
+                REGION: config.region,
                 COGNITO_REGION: config.stack.dev.cognitoRegion,
                 CDN_S3_BUCKET: config.stack.dev.cdnS3,
                 CDN_DISTRIBUTION_ID: config.stack.dev.cdnDistributionId,
+                EMAIL_IDENTITY: config.stack.dev.emailIdentity,
+                API_ENDPOINT: config.stack.dev.enpoints.api,
+                WEB_ENDPOINT: config.stack.dev.enpoints.web,
+                TEMPLATE_NAME: 'OTPEmailTemplate',
             },
-        });
-
-        const gatewayInfo = buildNameAndId({
-            resourceName: 'gateway',
-            envName: 'dev',
         });
 
         fn.addToRolePolicy(
@@ -148,12 +156,18 @@ export class ApplicationStack extends cdk.Stack {
                     'ses:SendTemplatedEmail',
                 ],
                 resources: [
-                    `arn:aws:ses:${config.stack.dev.cognitoRegion}:${config.stack.dev.account}:identity/${config.stack.dev.emailIdentity}`,
-                    `arn:aws:ses:${config.stack.dev.cognitoRegion}:${config.stack.dev.account}:identity/${config.stack.dev.enpoints.api}`,
+                    props.emailIdentityArn,
+                    props.domainIdentityArn,
+                    `arn:aws:ses:${config.region}:${config.stack.dev.account}:template/OTPEmailTemplate`,
                 ],
                 effect: iam.Effect.ALLOW,
             })
         );
+
+        const gatewayInfo = buildNameAndId({
+            resourceName: 'gateway',
+            envName: 'dev',
+        });
 
         const cert = Certificate.fromCertificateArn(
             this,

@@ -10,6 +10,8 @@ const sesStack = new SesEmailStack(app, 'SesStack', {
         account: config.stack.dev.account,
         region: config.stack.dev.cognitoRegion,
     },
+    stackName: config.stackName + '-ses',
+    crossRegionReferences: true,
 });
 
 const applicationStack = new ApplicationStack(app, 'ApplicationStack', {
@@ -17,7 +19,10 @@ const applicationStack = new ApplicationStack(app, 'ApplicationStack', {
         account: config.stack.dev.account,
         region: config.region,
     },
+    stackName: config.stackName + '-app',
     crossRegionReferences: true,
+    emailIdentityArn: sesStack.emailIdentityArn,
+    domainIdentityArn: sesStack.domainIdentityArn,
 });
 
 applicationStack.addDependency(sesStack);

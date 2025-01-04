@@ -7,7 +7,7 @@ import {
 } from '@aws-sdk/client-ses';
 
 const ses = new SESClient({
-    region: process.env.COGNITO_REGION,
+    region: process.env.REGION,
 });
 
 const sendEmail = async (email: string) => {
@@ -15,7 +15,7 @@ const sendEmail = async (email: string) => {
         Destination: {
             ToAddresses: [email],
         },
-        Source: 'muhdabbas98@gmail.com',
+        Source: process.env.EMAIL_IDENTITY,
         Message: {
             Body: {
                 Text: {
@@ -45,8 +45,8 @@ const sendTemplateEmail = async (email: string) => {
         Destination: {
             ToAddresses: [email],
         },
-        Source: 'muhdabbas98@gmail.com',
-        Template: 'OTPEmailTemplate',
+        Source: process.env.EMAIL_IDENTITY,
+        Template: process.env.TEMPLATE_NAME,
         TemplateData: JSON.stringify({ code: '123456' }),
     };
 
