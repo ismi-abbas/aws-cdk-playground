@@ -16,13 +16,37 @@ export const app = new Hono()
     })
     .post('/email', async (c) => {
         const { email } = await c.req.json();
-        const response = await sendEmail(email);
-        return c.json(response);
+        try {
+            const response = await sendEmail(email);
+            console.log(response);
+            return c.json({
+                success: true,
+                message: 'Email sent successfully',
+            });
+        } catch (error) {
+            console.error('Error sending email:', error);
+            return c.json({
+                success: false,
+                error: error,
+            });
+        }
     })
     .post('/template-email', async (c) => {
-        const { email } = await c.req.json();
-        const response = await sendTemplateEmail(email);
-        return c.json(response);
+        const { email, code } = await c.req.json();
+        try {
+            const response = await sendTemplateEmail(email, code);
+            console.log(response);
+            return c.json({
+                success: true,
+                message: 'Email sent successfully',
+            });
+        } catch (error) {
+            console.error('Error sending template email:', error);
+            return c.json({
+                success: false,
+                error: error,
+            });
+        }
     });
 
 export const handler = handle(app);

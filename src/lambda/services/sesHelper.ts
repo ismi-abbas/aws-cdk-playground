@@ -40,14 +40,14 @@ const sendEmail = async (email: string) => {
     }
 };
 
-const sendTemplateEmail = async (email: string) => {
+const sendTemplateEmail = async (email: string, code: string) => {
     const params: SendTemplatedEmailCommandInput = {
         Destination: {
             ToAddresses: [email],
         },
         Source: process.env.EMAIL_IDENTITY,
         Template: process.env.TEMPLATE_NAME,
-        TemplateData: JSON.stringify({ code: '123456' }),
+        TemplateData: JSON.stringify({ code }),
     };
 
     try {

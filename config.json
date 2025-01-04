@@ -17,7 +17,7 @@
             "enpoints": {
                 "api": "aws.ismiabbas.xyz",
                 "web": "aws.ismiabbas.xyz",
-                "certArn": "arn:aws:acm:ap-southeast-1:654654447613:certificate/f87a6902-873b-4b3d-a3f7-d7dd5a73a3e5",
+                "certArn": "arn:aws:acm:ap-southeast-1:654654447613:certificate/44200551-d3b5-4085-adc7-6ba154fc84a7",
                 "globalCertArn": "arn:aws:acm:us-east-1:654654447613:certificate/040782fb-ab48-4938-8ea4-5b9123763cc7"
             }
         },
